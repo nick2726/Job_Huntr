@@ -1,12 +1,34 @@
 const express = require('express');
 const multer = require('multer');
-const pdfParse = require('pdf-parse');
+const pdfModule = require('pdf-parse');
 const { ChatOpenAI } = require('@langchain/openai');
 const { protect } = require('../middleware/auth');
 const { createAgentGraph } = require('../ai/agent');
 
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
+
+// Universal PDF Text Extractor handling pdf-parse v1 & v2 module exports
+const parsePdfBuffer = async (buffer) => {
+  try {
+    if (typeof pdfModule === 'function') {
+      const res = await pdfModule(buffer);
+      return res.text || '';
+    }
+    if (pdfModule && pdfModule.PDFParse) {
+      const parser = new pdfModule.PDFParse({ data: buffer });
+      const res = await parser.getText();
+      return typeof res === 'string' ? res : (res.text || '');
+    }
+    if (pdfModule && pdfModule.default && typeof pdfModule.default === 'function') {
+      const res = await pdfModule.default(buffer);
+      return res.text || '';
+    }
+  } catch (err) {
+    console.error('PDF extraction failed:', err.message);
+  }
+  return '';
+};
 
 /**
  * @openapi
@@ -43,7 +65,6 @@ router.post('/chat', async (req, res) => {
     }
 
     if (!process.env.OPENAI_API_KEY) {
-      // Graceful simulated AI response if OPENAI_API_KEY is missing
       return res.status(200).json({ 
         success: true, 
         simulated: true,
@@ -100,11 +121,9 @@ router.post('/match-resume', upload.single('resume'), async (req, res) => {
 
     // Extract text if PDF file uploaded
     if (req.file) {
-      try {
-        const parsedPdf = await pdfParse(req.file.buffer);
-        resumeContent += `\n${parsedPdf.text}`;
-      } catch (pdfErr) {
-        console.error('PDF parsing error:', pdfErr.message);
+      const extractedText = await parsePdfBuffer(req.file.buffer);
+      if (extractedText) {
+        resumeContent += `\n${extractedText}`;
       }
     }
 
@@ -182,7 +201,6 @@ Return strictly valid JSON with NO markdown codeblock formatting:
       ? Math.round((matchedSkills.length / totalTarget) * 100) 
       : 85;
 
-    // Give bonus for matching experience / projects
     if (lowerResume.includes('project') || lowerResume.includes('experience')) matchScore = Math.min(100, matchScore + 5);
 
     const summary = matchScore >= 75
