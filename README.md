@@ -6,6 +6,7 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-v6%2B-47A248.svg)](https://www.mongodb.com/)
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-v4-38BDF8.svg)](https://tailwindcss.com/)
 [![OpenAI](https://img.shields.io/badge/OpenAI-LangChain-412991.svg)](https://openai.com/)
+[![CI/CD Pipeline](https://github.com/nick2726/Job_Huntr/actions/workflows/ci.yml/badge.svg)](https://github.com/nick2726/Job_Huntr/actions)
 [![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](LICENSE)
 
 **JobHuntr** (InternshipHub) is a production-ready, full-stack job and internship discovery platform built with **Node.js, Express, MongoDB, React 19, Vite, and Tailwind CSS**. It features intelligent job aggregation scrapers, AI-powered career counseling via **LangChain & OpenAI**, real-time bookmarking, resume management, and role-based access control.
