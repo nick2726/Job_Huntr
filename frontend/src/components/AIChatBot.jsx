@@ -31,7 +31,6 @@ const AIChatBot = () => {
     try {
       const res = await api.post('/ai/chat', { message: userMessage });
       
-      // Check if it's a simulated fallback response from backend
       if (res.data.simulated) {
         setMessages(prev => [...prev, { role: 'bot', content: res.data.data + '\n\n*(Note: This is a simulated response because the OpenAI API Key is missing).*' }]);
       } else {
@@ -51,21 +50,22 @@ const AIChatBot = () => {
       {/* Floating Action Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 p-4 rounded-full bg-indigo-600 text-white shadow-lg hover:bg-indigo-700 transition-transform ${isOpen ? 'scale-0' : 'scale-100'} z-50 flex items-center justify-center`}
+        className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 p-3.5 sm:p-4 rounded-full bg-indigo-600 text-white shadow-xl hover:bg-indigo-700 transition-transform ${isOpen ? 'scale-0' : 'scale-100'} z-50 flex items-center justify-center cursor-pointer`}
+        aria-label="Open AI Assistant"
       >
         <MessageSquare className="w-6 h-6" />
       </button>
 
       {/* Chat Window */}
-      <div className={`fixed bottom-6 right-6 w-[350px] sm:w-[400px] h-[500px] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform origin-bottom-right ${isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'} z-50 border border-gray-200 dark:border-gray-700`}>
+      <div className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 w-[calc(100vw-2rem)] max-w-[380px] sm:max-w-[400px] h-[480px] sm:h-[500px] bg-white dark:bg-gray-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 transform origin-bottom-right ${isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0 pointer-events-none'} z-50 border border-gray-200 dark:border-gray-700`}>
         
         {/* Header */}
         <div className="bg-indigo-600 p-4 flex items-center justify-between text-white">
           <div className="flex items-center gap-2">
             <Bot className="w-6 h-6" />
-            <h3 className="font-semibold text-lg">AI Assistant</h3>
+            <h3 className="font-semibold text-base sm:text-lg">AI Assistant</h3>
           </div>
-          <button onClick={() => setIsOpen(false)} className="text-white hover:bg-indigo-700 p-1 rounded-md transition-colors">
+          <button onClick={() => setIsOpen(false)} className="text-white hover:bg-indigo-700 p-1 rounded-md transition-colors cursor-pointer" aria-label="Close AI Assistant">
             <X className="w-5 h-5" />
           </button>
         </div>
@@ -77,7 +77,7 @@ const AIChatBot = () => {
               <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${msg.role === 'user' ? 'bg-indigo-100 dark:bg-indigo-900/50' : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700'}`}>
                 {msg.role === 'user' ? <User className="w-4 h-4 text-indigo-600 dark:text-indigo-400" /> : <Bot className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />}
               </div>
-              <div className={`max-w-[75%] px-4 py-2 rounded-2xl text-sm ${msg.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-tl-none whitespace-pre-wrap'}`}>
+              <div className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-xs sm:text-sm ${msg.role === 'user' ? 'bg-indigo-600 text-white rounded-tr-none' : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700 rounded-tl-none whitespace-pre-wrap'}`}>
                 {msg.content}
               </div>
             </div>
@@ -87,7 +87,7 @@ const AIChatBot = () => {
               <div className="w-8 h-8 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 flex items-center justify-center flex-shrink-0">
                 <Bot className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
               </div>
-              <div className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-tl-none">
+              <div className="px-4 py-2.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl rounded-tl-none">
                 <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
               </div>
             </div>
@@ -96,19 +96,19 @@ const AIChatBot = () => {
         </div>
 
         {/* Input */}
-        <form onSubmit={handleSend} className="p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex gap-2">
+        <form onSubmit={handleSend} className="p-3 sm:p-4 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 flex gap-2">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Ask me anything..."
-            className="flex-1 px-4 py-2 bg-gray-100 dark:bg-gray-900 border border-transparent focus:bg-white dark:focus:bg-gray-800 focus:border-indigo-500 rounded-full text-sm outline-none dark:text-white transition-colors"
+            className="flex-1 px-4 py-2 bg-gray-100 dark:bg-gray-900 border border-transparent focus:bg-white dark:focus:bg-gray-800 focus:border-indigo-500 rounded-full text-xs sm:text-sm outline-none dark:text-white transition-colors"
             disabled={isLoading}
           />
           <button 
             type="submit" 
             disabled={!input.trim() || isLoading}
-            className="w-10 h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+            className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-indigo-600 text-white flex items-center justify-center hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0 cursor-pointer"
           >
             <Send className="w-4 h-4 ml-[-2px]" />
           </button>
