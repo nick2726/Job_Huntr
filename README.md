@@ -92,6 +92,22 @@ Make sure you have the following installed on your machine:
 
 ---
 
+### 🐳 **Option 1: Quickstart with Docker (Recommended)**
+
+You can launch the entire stack (**Frontend, Backend, and MongoDB Database**) in a single command using Docker:
+
+```bash
+docker compose up --build
+```
+
+- **Frontend**: [http://localhost](http://localhost)
+- **Backend API**: [http://localhost:5000](http://localhost:5000)
+- **MongoDB**: Listening on `localhost:27017`
+
+---
+
+### **Option 2: Manual Local Setup**
+
 ### **1. Clone the Repository**
 
 ```bash
