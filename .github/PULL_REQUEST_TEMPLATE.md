@@ -1,0 +1,31 @@
+## 📌 Description
+Please include a summary of the changes and the related issue. List any dependencies that are required for this change.
+
+Fixes # (issue)
+
+## 🛠️ Type of Change
+Please delete options that are not relevant:
+- [ ] 🐛 Bug fix (non-breaking change which fixes an issue)
+- [ ] ✨ New feature (non-breaking change which adds functionality)
+- [ ] 💥 Breaking change (fix or feature that would cause existing functionality to not work as expected)
+- [ ] 📝 Documentation update
+- [ ] 🐳 Docker / CI/CD pipeline update
+
+## 🧪 How Has This Been Tested?
+Please describe the tests that you ran to verify your changes. Provide instructions so we can reproduce.
+
+- [ ] Tested manually via local development server (`npm run dev`)
+- [ ] Tested inside Docker container (`docker compose up`)
+- [ ] Oxlint linting passed (`cd frontend && npm run lint`)
+- [ ] Frontend production build passed (`cd frontend && npm run build`)
+- [ ] Backend syntax check passed (`cd backend && node --check server.js`)
+
+## 📸 Screenshots (If Applicable)
+Add screenshots or GIFs to help explain your UI/UX changes.
+
+## 📋 Checklist:
+- [ ] My code follows the style guidelines of this project
+- [ ] I have performed a self-review of my own code
+- [ ] I have commented my code, particularly in hard-to-understand areas
+- [ ] I have made corresponding changes to the documentation (`README.md`)
+- [ ] My changes generate no new warnings or errors
