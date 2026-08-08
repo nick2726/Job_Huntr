@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import api from '../services/api';
-import { Upload, CheckCircle2, XCircle, Sparkles, FileText, AlertCircle, ArrowRight } from 'lucide-react';
+import { Upload, CheckCircle2, XCircle, Sparkles, FileText, AlertCircle, ArrowRight, RefreshCw } from 'lucide-react';
 
 export default function ATSMatcher() {
   const [resumeText, setResumeText] = useState('');
@@ -14,6 +14,36 @@ export default function ATSMatcher() {
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
     }
+  };
+
+  const handleFillSample = () => {
+    setResumeText(
+      `Alex Mercer
+Software Engineering Candidate | Bengaluru, India
+Email: alex@example.com | Portfolio: github.com/alexmercer
+
+SKILLS:
+- Frontend: React, JavaScript, HTML5, CSS3, Tailwind CSS, Redux
+- Backend: Node.js, Express, REST APIs, MongoDB, SQL
+- Tools: Git, GitHub, VS Code, Postman, Vite
+
+EXPERIENCE & PROJECTS:
+- Full-Stack Developer Intern at TechCorp (6 Months): Built responsive React UI components and integrated Express REST API endpoints with MongoDB.
+- JobHuntr Aggregator Project: Developed an automated job scraping portal with AI ATS scoring using LangChain and Node.js.`
+    );
+
+    setJobDescription(
+      `Full-Stack Software Engineering Intern
+Location: Remote / Bengaluru
+
+Requirements:
+- Strong proficiency in React, JavaScript (ES6+), and modern CSS frameworks like Tailwind CSS.
+- Hands-on experience with Node.js, Express framework, and MongoDB or SQL databases.
+- Familiarity with RESTful APIs, Git version control, and TypeScript.
+- Knowledge of Docker, CI/CD pipelines, and AWS is a plus.
+- Pursuing B.Tech / B.E in Computer Science or related fields.`
+    );
+    setError('');
   };
 
   const handleAnalyze = async (e) => {
@@ -49,16 +79,16 @@ export default function ATSMatcher() {
         setError(res.data.error || 'Failed to analyze resume.');
       }
     } catch (err) {
-      setError(err.response?.data?.error || 'Failed to analyze ATS match score.');
+      setError(err.response?.data?.error || 'Failed to analyze ATS match score. Please check inputs.');
     } finally {
       setLoading(false);
     }
   };
 
   const getScoreColor = (score) => {
-    if (score >= 80) return 'text-emerald-500 stroke-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200';
-    if (score >= 60) return 'text-amber-500 stroke-amber-500 bg-amber-50 dark:bg-amber-950/30 border-amber-200';
-    return 'text-rose-500 stroke-rose-500 bg-rose-50 dark:bg-rose-950/30 border-rose-200';
+    if (score >= 80) return 'text-emerald-500 stroke-emerald-500 bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800';
+    if (score >= 60) return 'text-amber-500 stroke-amber-500 bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800';
+    return 'text-rose-500 stroke-rose-500 bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-800';
   };
 
   return (
@@ -72,9 +102,21 @@ export default function ATSMatcher() {
         <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
           Optimize Your Resume for ATS Scanners
         </h1>
-        <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
+        <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto text-sm sm:text-base">
           Compare your resume against any job description. Get instant match scores, missing skill gaps, and AI feedback to get hired faster.
         </p>
+
+        {/* Quick Sample Button */}
+        <div>
+          <button
+            type="button"
+            onClick={handleFillSample}
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-50 dark:bg-indigo-950/60 hover:bg-indigo-100 text-indigo-700 dark:text-indigo-300 text-xs font-semibold border border-indigo-200 dark:border-indigo-800 transition-colors cursor-pointer shadow-xs"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>Autofill Sample Resume & Job Description</span>
+          </button>
+        </div>
       </div>
 
       {/* Input Form */}
@@ -114,7 +156,7 @@ export default function ATSMatcher() {
             <div className="text-center text-xs text-gray-400 font-medium uppercase tracking-wider">or paste resume text</div>
 
             <textarea
-              rows={6}
+              rows={7}
               value={resumeText}
               onChange={(e) => setResumeText(e.target.value)}
               placeholder="Paste raw text from your resume..."
@@ -128,7 +170,7 @@ export default function ATSMatcher() {
               Job / Internship Description
             </label>
             <textarea
-              rows={11}
+              rows={12}
               value={jobDescription}
               onChange={(e) => setJobDescription(e.target.value)}
               placeholder="Paste the target job description or requirements here..."
