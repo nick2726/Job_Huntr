@@ -9,25 +9,26 @@
 [![Docker Ready](https://img.shields.io/badge/Docker-Containers%20Ready-2496ED.svg)](https://www.docker.com/)
 [![CI/CD Pipeline](https://github.com/nick2726/Job_Huntr/actions/workflows/ci.yml/badge.svg)](https://github.com/nick2726/Job_Huntr/actions)
 [![Swagger Docs](https://img.shields.io/badge/Swagger-OpenAPI%203.0-85EA2D.svg)](http://localhost:5000/api-docs)
+[![Responsive UI](https://img.shields.io/badge/Mobile-Fully%20Responsive-ff69b4.svg)](#)
 [![License](https://img.shields.io/badge/License-MIT-brightgreen.svg)](LICENSE)
 
-**JobHuntr** is a production-grade, full-stack job and internship discovery platform built with **Node.js, Express, MongoDB, React 19, Vite, and Tailwind CSS**. It features intelligent job aggregation scrapers, AI-powered ATS resume matching, interactive Swagger API documentation, enterprise security protection, containerized Docker support, and an automated GitHub Actions CI/CD pipeline.
+**JobHuntr** is a production-grade, full-stack job and internship discovery platform built with **Node.js, Express, MongoDB, React 19, Vite, and Tailwind CSS**. It features intelligent job aggregation scrapers, AI-powered ATS resume matching, interactive Swagger API documentation, enterprise security protection, containerized Docker support, fully responsive mobile navigation, and an automated GitHub Actions CI/CD pipeline.
 
 ---
 
 ## 🌟 Key Features
 
 - **📄 AI ATS Resume Scanner**: Upload PDF resumes or paste resume text to calculate real-time ATS match scores (0-100%), skill gap analysis, and AI optimization recommendations.
+- **📱 100% Mobile Responsive UI**: Touch-friendly collapsible mobile drawer navigation, responsive filter sidebars, and adaptive AI chatbot viewports for mobile, tablet, and desktop screens.
 - **📚 Interactive Swagger API Docs**: Explore and test REST API endpoints live at `/api-docs` using OpenAPI 3.0 specs.
-- **🛡️ Enterprise Security Suite**: Protected with **Helmet** HTTP security headers, **Express-Rate-Limit** protection against brute-force attacks, and **Mongo-Sanitize** NoSQL injection protection.
+- **🛡️ Enterprise Security Suite**: Protected with **Helmet** HTTP security headers, **Express-Rate-Limit** protection against brute-force attacks, and Express 5 getter-safe NoSQL injection protection.
 - **🐳 Docker & Docker Compose Support**: Spin up the entire stack (Frontend Nginx, Backend Express, and MongoDB) with a single command: `docker compose up --build`.
 - **⚙️ GitHub Actions CI/CD**: Automated integration pipeline executing syntax checks, Oxlint linting, production Vite compilation, and Docker build validations on every push.
-- **🎯 Smart Search & Filtering**: Discover internships by location, job type (Remote/On-site/Hybrid), category, and stipend range.
+- **🎯 Smart Search & Filtering**: Discover internships by location (including Indian tech hubs), job type (Remote/On-site/Hybrid), category, and stipend range.
 - **🤖 AI Career Assistant**: Built-in AI Chatbot powered by LangChain and OpenAI to provide resume feedback, career guidance, and interview prep.
-- **🕷️ Multi-Source Job Aggregator**: Automated scrapers fetching live job feeds from RemoteOK, Arbeitnow, LinkedIn, and SerpApi.
+- **🕷️ Multi-Source Job Aggregator**: Automated scrapers fetching live job feeds from RemoteOK, Arbeitnow, LinkedIn, and SerpApi (Google Jobs).
 - **🔐 Secure Authentication**: JWT authentication with HTTP-only cookies and bcrypt password hashing supporting Student & Recruiter roles.
 - **⭐ Bookmarks & Application Tracker**: Save favorite internships and track application statuses.
-- **🌓 Modern Responsive UI**: Tailored with Tailwind CSS v4, dark/light theme support, and fluid micro-animations.
 
 ---
 
@@ -46,10 +47,11 @@
 ### **Backend & DevOps**
 | Technology | Description |
 | :--- | :--- |
-| **Node.js & Express** | Scalable RESTful API server framework |
+| **Node.js & Express 5** | Scalable RESTful API server framework |
 | **MongoDB & Mongoose** | NoSQL database & Object Data Modeling (ODM) |
 | **LangChain & OpenAI** | AI Agent framework for intelligent chat responses & ATS match analysis |
 | **PDF-Parse** | Extraction engine for candidate PDF resumes |
+| **SerpApi** | Live Google Jobs API search engine integration |
 | **Swagger UI & JSDoc** | Interactive OpenAPI 3.0 interactive documentation |
 | **Helmet & Rate Limit** | Enterprise HTTP header security & anti-brute-force rate limiting |
 | **Docker & Nginx** | Multi-stage containerization & reverse proxy |
@@ -62,8 +64,11 @@
 ```
 Job_Huntr/
 ├── .github/
-│   └── workflows/
-│       └── ci.yml             # GitHub Actions CI/CD Pipeline
+│   ├── ISSUE_TEMPLATE/        # GitHub Issue Templates (bug_report, feature_request)
+│   ├── workflows/
+│   │   └── ci.yml             # GitHub Actions CI/CD Pipeline
+│   ├── PULL_REQUEST_TEMPLATE  # Pull Request template
+│   └── dependabot.yml         # Dependabot automated dependency update config
 ├── backend/
 │   ├── adapters/              # Data adapters (MongoDB & Internship adapters)
 │   ├── ai/                    # LangChain & OpenAI AI agent logic
@@ -74,8 +79,8 @@ Job_Huntr/
 │   ├── middleware/            # Auth, rate-limiting & security middleware
 │   ├── models/                # Mongoose schemas (User, Internship, Company)
 │   ├── routes/                # Express route definitions with Swagger annotations
-│   ├── scripts/               # DB seeding & web scraping scripts
-│   ├── services/              # Job aggregator & external web scrapers
+│   ├── scripts/               # DB seeding (Indian jobs & global) & web scraping scripts
+│   ├── services/              # Job aggregator & external web scrapers (SerpApi, RemoteOK, Arbeitnow)
 │   ├── utils/                 # Helper functions (Email sender, validators)
 │   ├── Dockerfile             # Backend Node 20 Docker configuration
 │   └── server.js              # Entry point for backend Express server
@@ -91,9 +96,14 @@ Job_Huntr/
 │   │   └── App.jsx            # Application router
 │   ├── nginx.conf             # Nginx reverse-proxy configuration
 │   ├── Dockerfile             # Multi-stage Nginx Docker configuration
+│   ├── vercel.json            # Vercel SPA routing deployment config
 │   └── vite.config.js         # Vite build configuration
 │
 ├── docker-compose.yml         # Container orchestration (Frontend + Backend + MongoDB)
+├── render.yaml                # Render Infrastructure-as-Code deployment config
+├── CONTRIBUTING.md            # Open-source contribution guidelines
+├── CODE_OF_CONDUCT.md         # Contributor Code of Conduct
+├── LICENSE                    # MIT License
 └── README.md                  # Project documentation
 ```
 
@@ -149,13 +159,17 @@ JWT_SECRET=supersecretjwtkey12345
 JWT_EXPIRE=30d
 NODE_ENV=development
 OPENAI_API_KEY=your_openai_api_key_here
+SERPAPI_KEY=your_serpapi_key_here
 ```
 
-##### **Seed Initial Database Data**
+##### **Seed Initial Database Data & Indian Jobs**
 ```bash
-node scripts/seed.js
-# Or seed India specific listings:
 node scripts/seedIndiaJobs.js
+```
+
+##### **Fetch Real-Time Google Jobs via SerpApi**
+```bash
+node scripts/fetchJobs.js --location="India"
 ```
 
 ##### **Start Backend Server**
@@ -205,19 +219,14 @@ Explore interactive documentation live at **`/api-docs`** or refer to the table 
 
 - **Rate Limiting**: Protects against brute-force attacks (`30 requests/15m` on Auth, `200 requests/15m` on general API).
 - **Security Headers**: Managed via **Helmet** HTTP header middleware.
-- **Injection Defense**: Query parameters sanitized via **Express-Mongo-Sanitize**.
-- **Automated CI**: GitHub Actions validates syntax, Oxlint linting, Vite production build, and Docker compilation on every PR.
+- **Injection Defense**: Express 5 getter-safe NoSQL query & body parameter sanitizer.
+- **Automated CI**: GitHub Actions validates syntax, Oxlint linting, Vite production compilation, and Docker build verification on every PR.
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! To contribute:
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Contributions are welcome! Read our [CONTRIBUTING.md](CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for details.
 
 ---
 
