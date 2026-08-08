@@ -15,11 +15,13 @@
 
 ## 🌟 Key Features
 
+- **📄 AI ATS Resume Scanner**: Upload PDF resumes or paste resume text to calculate real-time ATS match scores (0-100%), skill gap analysis, and AI optimization recommendations.
+- **📚 Interactive Swagger API Docs**: Explore and test REST API endpoints live at `/api-docs` using OpenAPI 3.0 specs.
+- **🛡️ Enterprise Security Suite**: Protected with **Helmet** HTTP security headers, **Express-Rate-Limit** protection against brute-force attacks, and **Mongo-Sanitize** NoSQL injection protection.
 - **🎯 Smart Search & Filtering**: Discover internships by location, job type (Remote/On-site/Hybrid), category, and stipend range.
 - **🤖 AI Career Assistant**: Built-in AI Chatbot powered by LangChain and OpenAI to provide resume feedback, career guidance, and interview prep.
 - **🕷️ Multi-Source Job Aggregator**: Automated scrapers fetching live job feeds from RemoteOK, Arbeitnow, LinkedIn, and SerpApi.
 - **🔐 Secure Authentication**: JWT authentication with HTTP-only cookies and bcrypt password hashing supporting Student & Recruiter roles.
-- **📄 Resume Management**: Built-in resume file upload (Multer) and applicant tracking.
 - **⭐ Bookmarks & Application Tracker**: Save favorite internships and track application statuses.
 - **🌓 Modern Responsive UI**: Tailored with Tailwind CSS v4, dark/light theme support, and fluid micro-animations.
 
