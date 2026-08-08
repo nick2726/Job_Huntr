@@ -4,7 +4,6 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const mongoSanitize = require('express-mongo-sanitize');
 const swaggerUi = require('swagger-ui-express');
 const swaggerSpec = require('./config/swagger');
 const connectDB = require('./config/db');
@@ -15,12 +14,38 @@ connectDB();
 
 const app = express();
 
-// Security Middlewares
+// Security Headers
 app.use(helmet({
   contentSecurityPolicy: false, // Allow inline styles & swagger scripts
 }));
 
-app.use(mongoSanitize());
+// Core Parsing Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost', 'http://localhost:80'],
+  credentials: true
+}));
+
+// Express 5 Compatible NoSQL Injection Sanitizer
+const sanitizeObject = (obj) => {
+  if (!obj || typeof obj !== 'object') return;
+  for (const key in obj) {
+    if (key.startsWith('$') || key.includes('.')) {
+      delete obj[key];
+    } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+      sanitizeObject(obj[key]);
+    }
+  }
+};
+
+app.use((req, res, next) => {
+  if (req.body) sanitizeObject(req.body);
+  if (req.params) sanitizeObject(req.params);
+  if (req.query) sanitizeObject(req.query);
+  next();
+});
 
 // Rate Limiting
 const apiLimiter = rateLimit({
@@ -38,14 +63,6 @@ const authLimiter = rateLimit({
 app.use('/api/', apiLimiter);
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/register', authLimiter);
-
-// Core Middleware
-app.use(express.json());
-app.use(cookieParser());
-app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost', 'http://localhost:80'],
-  credentials: true
-}));
 
 // Set static folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
