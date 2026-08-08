@@ -5,7 +5,7 @@ class SerpApiScraper extends ScraperInterface {
   constructor() {
     super('SerpApi (Google Jobs)');
     this.apiUrl = 'https://serpapi.com/search.json';
-    this.apiKey = process.env.SERPAPI_KEY;
+    this.apiKey = process.env.SERPAPI_KEY || process.env.SERP_API_KEY || process.env.SERPAPI_API_KEY;
   }
 
   async fetchJobs(filters = {}) {
