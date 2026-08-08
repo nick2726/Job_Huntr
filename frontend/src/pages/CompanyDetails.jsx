@@ -23,35 +23,35 @@ const CompanyDetails = () => {
     fetchCompany();
   }, [id]);
 
-  if (loading) return <div className="text-center py-10">Loading...</div>;
-  if (error) return <div className="text-center py-10 text-red-500">{error}</div>;
-  if (!company) return <div className="text-center py-10">Company not found.</div>;
+  if (loading) return <div className="text-center py-12 dark:text-white">Loading company details...</div>;
+  if (error) return <div className="text-center py-12 text-rose-500">{error}</div>;
+  if (!company) return <div className="text-center py-12 text-gray-500 dark:text-gray-400">Company not found.</div>;
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8 mb-8">
-        <div className="flex items-start gap-6">
-          <div className="w-24 h-24 bg-gray-50 rounded-xl flex items-center justify-center p-2 border border-gray-100">
+    <div className="max-w-4xl mx-auto space-y-8">
+      <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 p-6 sm:p-8">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-6">
+          <div className="w-24 h-24 bg-gray-50 dark:bg-gray-800 rounded-2xl flex items-center justify-center p-3 border border-gray-100 dark:border-gray-700 flex-shrink-0">
             {company.logo && company.logo !== 'no-logo.png' ? (
               <img src={company.logo} alt={company.companyName} className="w-full h-full object-contain" />
             ) : (
               <Building className="w-12 h-12 text-gray-400" />
             )}
           </div>
-          <div className="flex-1">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">{company.companyName}</h1>
-            <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-4">
-              <span className="flex items-center gap-1"><MapPin className="w-4 h-4" /> {company.location}</span>
+          <div className="flex-1 text-center sm:text-left space-y-3">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">{company.companyName}</h1>
+            <div className="flex flex-wrap justify-center sm:justify-start gap-4 text-sm text-gray-600 dark:text-gray-400">
+              <span className="flex items-center gap-1.5"><MapPin className="w-4 h-4 text-indigo-500" /> {company.location}</span>
               {company.website && (
-                <a href={company.website} target="_blank" rel="noreferrer" className="flex items-center gap-1 text-indigo-600 hover:underline">
+                <a href={company.website} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 hover:underline">
                   <Globe className="w-4 h-4" /> Visit Website
                 </a>
               )}
-              <span className="px-2 py-1 bg-gray-100 rounded text-xs font-medium uppercase tracking-wide">
-                {company.industry}
+              <span className="px-2.5 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md text-xs font-semibold uppercase tracking-wide">
+                {company.industry || 'Technology'}
               </span>
             </div>
-            <p className="text-gray-700 leading-relaxed">
+            <p className="text-gray-700 dark:text-gray-300 leading-relaxed text-sm sm:text-base">
               {company.description}
             </p>
           </div>
@@ -59,11 +59,9 @@ const CompanyDetails = () => {
       </div>
 
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Open Internships at {company.companyName}</h2>
-        {/* We would fetch the internships for this company here, or pass a filter to the internships component. 
-            For now, we leave a placeholder. */}
-        <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 text-center text-gray-500">
-          No open internships at the moment.
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Open Positions at {company.companyName}</h2>
+        <div className="bg-white dark:bg-gray-900 p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-800 text-center text-gray-500 dark:text-gray-400 text-sm">
+          Check the Browse Jobs page for active listings from {company.companyName}.
         </div>
       </div>
     </div>
