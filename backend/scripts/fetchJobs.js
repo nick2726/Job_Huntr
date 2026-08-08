@@ -1,9 +1,6 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
 const jobAggregator = require('../services/jobAggregator');
-
-// Load env vars
-dotenv.config({ path: './.env' });
 
 // Connect to DB
 mongoose.connect(process.env.MONGO_URI);
@@ -12,7 +9,7 @@ const runAggregator = async () => {
   try {
     console.log('Connecting to database for job aggregation...');
     
-    // Simple CLI argument parsing: node scripts/fetchJobs.js --role="Frontend"
+    // CLI argument parsing: node scripts/fetchJobs.js --role="Frontend" --location="India"
     const filters = {};
     process.argv.forEach(arg => {
       if (arg.startsWith('--role=')) filters.role = arg.split('=')[1];
@@ -22,7 +19,7 @@ const runAggregator = async () => {
     await jobAggregator.aggregateAndStore(filters);
     
     console.log('Job aggregation complete!');
-    process.exit();
+    process.exit(0);
   } catch (err) {
     console.error('Aggregation failed:', err);
     process.exit(1);

@@ -5,11 +5,12 @@ class SerpApiScraper extends ScraperInterface {
   constructor() {
     super('SerpApi (Google Jobs)');
     this.apiUrl = 'https://serpapi.com/search.json';
-    this.apiKey = process.env.SERPAPI_KEY || process.env.SERP_API_KEY || process.env.SERPAPI_API_KEY;
   }
 
   async fetchJobs(filters = {}) {
-    if (!this.apiKey) {
+    const apiKey = process.env.SERPAPI_KEY || process.env.SERP_API_KEY || process.env.SERPAPI_API_KEY;
+
+    if (!apiKey) {
       console.warn(`[${this.name}] SERPAPI_KEY is missing from .env. Skipping SerpApi job fetch.`);
       return [];
     }
@@ -17,8 +18,6 @@ class SerpApiScraper extends ScraperInterface {
     try {
       console.log(`[${this.name}] Fetching real jobs from Google Jobs via SerpApi...`);
       
-      // Build search query based on filters
-      // e.g. "software engineer internship in India"
       const role = filters.role || 'software engineer internship';
       const location = filters.location || 'India';
       const q = `${role} in ${location}`;
@@ -28,7 +27,7 @@ class SerpApiScraper extends ScraperInterface {
           engine: 'google_jobs',
           q: q,
           hl: 'en',
-          api_key: this.apiKey
+          api_key: apiKey
         }
       });
 
@@ -38,7 +37,6 @@ class SerpApiScraper extends ScraperInterface {
       for (const job of rawJobs) {
         if (!job.company_name) continue;
 
-        // Parse skills from highlights or description if available
         let skills = [];
         if (job.job_highlights) {
           job.job_highlights.forEach(highlight => {
@@ -54,12 +52,12 @@ class SerpApiScraper extends ScraperInterface {
           companyLogo: job.thumbnail || 'no-logo.png',
           location: job.location || location,
           description: job.description || 'No description provided.',
-          skills: skills.slice(0, 5), // Keep it concise
+          skills: skills.slice(0, 5),
           applyLink: job.related_links?.[0]?.link || 'https://google.com/search?q=' + encodeURIComponent(job.title + ' ' + job.company_name)
         });
       }
 
-      console.log(`[${this.name}] Found ${normalizedJobs.length} matching jobs from India.`);
+      console.log(`[${this.name}] Found ${normalizedJobs.length} matching jobs.`);
       return normalizedJobs;
     } catch (error) {
       console.error(`[${this.name}] Error fetching jobs:`, error.message);
